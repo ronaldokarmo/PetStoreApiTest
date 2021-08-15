@@ -17,7 +17,7 @@ public class PetTests {
         return new String(Files.readAllBytes(Paths.get(json)));
     }
 
-    @Test
+    @Test(priority = 1)
     public void incluirPet() throws IOException {
         String bodyJson = getJson("db/pet1.json");
 
@@ -35,8 +35,20 @@ public class PetTests {
                 .body("status", is("available"));
     }
 
-    @Test
+    @Test(priority = 2)
     public void consultarPet() {
+        String petId = "1984020712";
 
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .get(uri.concat("/pet/").concat(petId))
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("category.name", is("Dogs"))
+                .body("name", is("Nainai"))
+                .body("status", is("available"));;
     }
 }
