@@ -11,7 +11,8 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 
 public class PetTests {
-    String uri = "https://petstore.swagger.io/v2";
+    private String uri = "https://petstore.swagger.io/v2";
+    private String petId;
 
     public String getJson(String json) throws IOException {
         return new String(Files.readAllBytes(Paths.get(json)));
@@ -21,18 +22,23 @@ public class PetTests {
     public void incluirPet() throws IOException {
         String bodyJson = getJson("db/pet1.json");
 
-        given()
+        petId = given()
+                //.log().all()
                 .contentType("application/json")
                 .body(bodyJson)
         .when()
                 .post(uri.concat("/pet"))
         .then()
-                .log().all()
+                //.log().all()
                 .statusCode(200)
                 .body("category.name", is("Dogs"))
                 .body("name", is("Nainai"))
-                .body("tags.name", contains("adopted"))
-                .body("status", is("available"));
+                .body("tags.name", contains("breed"))
+                .body("status", is("available"))
+        .extract()
+                .jsonPath().getString("id");
+
+        System.out.println("petId:".concat(petId));
     }
 
     @Test(priority = 2)
@@ -40,15 +46,32 @@ public class PetTests {
         String petId = "1984020712";
 
         given()
+                //.log().all()
                 .contentType("application/json")
-                .log().all()
         .when()
                 .get(uri.concat("/pet/").concat(petId))
         .then()
-                .log().all()
+                //.log().all()
                 .statusCode(200)
-                .body("category.name", is("Dogs"))
+                //.body("id", is(petId.toString()))
                 .body("name", is("Nainai"))
-                .body("status", is("available"));;
+                .body("status", is("available"));
+    }
+
+    @Test(priority = 3)
+    public void AlterarPet() throws IOException {
+        String bodyJson = getJson("db/pet2.json");
+
+        given()
+                //.log().all()
+                .contentType("application/json")
+                .body(bodyJson)
+        .when()
+                .put(uri.concat("/pet"))
+        .then()
+                //.log().all()
+                .statusCode(200)
+                .body("name", is("Jazz"))
+                .body("status", is("adopted"));
     }
 }
