@@ -18,10 +18,6 @@ public class PetTests {
         return new String(Files.readAllBytes(Paths.get(json)));
     }
 
-    public static String removerCarecteres(String str) throws  NullPointerException {
-        return str.replaceAll("[-+.^:,<>]","");
-    }
-
     @Test(priority = 1)
     public void incluirPet() throws IOException {
         String bodyJson = getJson("db/pet1.json");
@@ -47,18 +43,16 @@ public class PetTests {
 
     @Test(priority = 2)
     public void consultarPet() {
-        //String petId = "1984020712";
-
         given()
                 .log().all()
                 .contentType("application/json")
-                .when()
+        .when()
                 .get(uri.concat("/pet/").concat(String.valueOf(petId)))
-                .then()
+        .then()
                 .log().all()
                 .statusCode(200)
-                .body("id", is(removerCarecteres(String.valueOf(petId))))
-                .body("name", is("Jazz"))
+                .body("id", is(petId))
+                .body("name", is("Nainai"))
                 .body("status", is("available"));
     }
 
