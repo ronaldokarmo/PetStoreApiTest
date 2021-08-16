@@ -1,0 +1,18 @@
+{
+  "id": 1984020712,
+  "category": {
+    "id": 1,
+    "name": "Dogs"
+  },
+  "name": "Nainai",
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 2021,
+      "name": "breed"
+    }
+  ],
+  "status": "available"
+}

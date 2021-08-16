@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.is;
 
 public class PetTests {
     private final String uri = "https://petstore.swagger.io/v2";
-    String petId;
+    private int petId;
 
     public String getJson(String json) throws IOException {
         return new String(Files.readAllBytes(Paths.get(json)));
@@ -26,7 +26,7 @@ public class PetTests {
     public void incluirPet() throws IOException {
         String bodyJson = getJson("db/pet1.json");
 
-        String petId = given()
+        petId = given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)
@@ -40,9 +40,9 @@ public class PetTests {
                 .body("tags.name", contains("breed"))
                 .body("status", is("available"))
         .extract()
-                .jsonPath().getString("id");
+                .jsonPath().getInt("id");
 
-        System.out.println("petId: ".concat(petId.toString()));
+        System.out.println("petId: ".concat(String.valueOf(petId)));
     }
 
     @Test(priority = 2)
@@ -53,12 +53,12 @@ public class PetTests {
                 .log().all()
                 .contentType("application/json")
                 .when()
-                .get(uri.concat("/pet/").concat(petId))
+                .get(uri.concat("/pet/").concat(String.valueOf(petId)))
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("id", is(removerCarecteres(petId)))
-                .body("name", is("Nainai"))
+                .body("id", is(removerCarecteres(String.valueOf(petId))))
+                .body("name", is("Jazz"))
                 .body("status", is("available"));
     }
 
@@ -80,17 +80,17 @@ public class PetTests {
     }
 
     @Test(priority = 4)
-    public void  excluirPet(){
+    public void  excluirPet() {
         given()
                 .log().all()
                 .contentType("application/json")
         .when()
-                .delete(uri.concat("/pet/").concat(petId))
+                .delete(uri.concat("/pet/").concat(String.valueOf(petId)))
         .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
                 .body("type", is ("unknown"))
-                .body("message", is(petId));
+                .body("message", is(String.valueOf(petId)));
     }
 }
