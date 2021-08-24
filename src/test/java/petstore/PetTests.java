@@ -70,7 +70,7 @@ public class PetTests {
                 .log().all()
                 .statusCode(200)
                 .body("name", is("Jazz"))
-                .body("status", is("adopted"));
+                .body("status", is("sold"));
     }
 
     @Test(priority = 4)
