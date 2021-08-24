@@ -51,9 +51,9 @@ public class User {
                 .log().all()
                 .statusCode(200)
                 .body("id", is(userId))
-                .body("petId", is(1984020712))
-                .body("quantity", is(5))
-                .body("status", is("placed"));
+                .body("username", is("rcarmo"))
+                .body("firstName", is("Ronaldo"))
+                .body("email", is("ronaldokarmo@gmail.com"));
     }
 
     @Test(priority =11)
@@ -61,9 +61,9 @@ public class User {
         given()
                 .log().all()
                 .contentType("application/json")
-                .when()
+        .when()
                 .delete(uri.concat("/user/").concat(userId))
-                .then()
+        .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
