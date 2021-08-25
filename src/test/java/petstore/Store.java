@@ -18,7 +18,7 @@ public class Store {
         return new String(Files.readAllBytes(Paths.get(json)));
     }
 
-    @Test(priority = 5)
+    @Test(priority = 6)
     public void incluirStore() throws IOException {
         String bodyJson = getJson("db/store1.json");
 
@@ -41,7 +41,7 @@ public class Store {
         System.out.println("storeId: ".concat(String.valueOf(storeId)));
     }
 
-    @Test(priority = 6)
+    @Test(priority = 7)
     public void consultarStore() {
         given()
                 .log().all()

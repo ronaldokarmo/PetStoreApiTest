@@ -7,8 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.equalTo;
 
 public class PetTests {
     private final String uri = "https://petstore.swagger.io/v2";
@@ -86,5 +88,20 @@ public class PetTests {
                 .body("code", is(200))
                 .body("type", is ("unknown"))
                 .body("message", is(String.valueOf(petId)));
+    }
+
+    @Test(priority = 5)
+    public void consultarPetPorStatus(){
+        String status = "available";
+
+        given()
+                .log().all()
+                .contentType("application/json")
+        .when()
+                .get(uri.concat("/pet/findByStatus?status=").concat(status))
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("name[]", everyItem(equalTo("Jazz")));
     }
 }

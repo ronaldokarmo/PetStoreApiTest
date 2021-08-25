@@ -40,34 +40,34 @@ public class User {
         System.out.println("usertId: ".concat(userId));
     }
 
-    @Test(priority = 10)
-    public void consultarUser() {
-        given()
-                .log().all()
-                .contentType("application/json")
-        .when()
-                .get(uri.concat("/user/").concat(userId))
-        .then()
-                .log().all()
-                .statusCode(200)
-                .body("id", is(userId))
-                .body("username", is("rcarmo"))
-                .body("firstName", is("Ronaldo"))
-                .body("email", is("ronaldokarmo@gmail.com"));
-    }
+//    @Test(priority = 10)
+//    public void consultarUser() {
+//        given()
+//                .log().all()
+//                .contentType("application/json")
+//        .when()
+//                .get(uri.concat("/user/").concat(userId))
+//        .then()
+//                .log().all()
+//                .statusCode(200)
+//                .body("id", is(userId))
+//                .body("username", is("rcarmo"))
+//                .body("firstName", is("Ronaldo"))
+//                .body("email", is("ronaldokarmo@gmail.com"));
+//    }
 
-    @Test(priority =11)
-    public void  excluirUser() {
-        given()
-                .log().all()
-                .contentType("application/json")
-        .when()
-                .delete(uri.concat("/user/").concat(userId))
-        .then()
-                .log().all()
-                .statusCode(200)
-                .body("code", is(200))
-                .body("type", is ("unknown"))
-                .body("message", is(userId));
-    }
+//    @Test(priority =11)
+//    public void  excluirUser() {
+//        given()
+//                .log().all()
+//                .contentType("application/json")
+//        .when()
+//                .delete(uri.concat("/user/").concat(userId))
+//        .then()
+//                .log().all()
+//                .statusCode(200)
+//                .body("code", is(200))
+//                .body("type", is ("unknown"))
+//                .body("message", is(userId));
+//    }
 }
