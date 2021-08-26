@@ -1,6 +1,5 @@
 package trainee;
 
-
 import io.restassured.RestAssured;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
