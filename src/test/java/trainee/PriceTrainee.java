@@ -4,7 +4,12 @@ import io.restassured.RestAssured;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static io.restassured.RestAssured.expect;
+import static io.restassured.config.JsonConfig.jsonConfig;
+import static io.restassured.config.RestAssuredConfig.newConfig;
+import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
 import static org.hamcrest.Matchers.is;
 
 public class PriceTrainee {
@@ -16,14 +21,26 @@ public class PriceTrainee {
     }
 
     @Test
-    public void GetLottoPrice() {
+    public void GetLottoForPriceOneForm() {
         expect()
+        .given()
                 .log().all()
-                .body("price", is(12.12f))
-                .given()
+        .when()
+                .get("/price")
+        .then()
                 .log().all()
-                .when()
-                .get("/price");
+                .body("price", is(12.12f));
+    }
 
+    @Test
+    public void GetLottoForPriceTwoForm() {
+        expect().given()
+                .log().all()
+                .config(newConfig().jsonConfig(jsonConfig().numberReturnType(BIG_DECIMAL)))
+        .when()
+                .get("/price")
+        .then()
+                .log().all()
+                .body("price", is(new BigDecimal("12.12")));
     }
 }

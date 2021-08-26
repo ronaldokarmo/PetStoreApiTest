@@ -18,7 +18,7 @@ public class LottoTrainee {
     }
 
     @Test
-    public void GetLottoId() {
+    public void GetLottoForIdOneForm() {
         given()
                 .log().all()
                 .contentType("application/json")
@@ -30,24 +30,24 @@ public class LottoTrainee {
     }
 
     @Test
-    public void GetLottoIdExpect() {
-        expect()
-                .log().all()
-                .body("lotto.lottoId", equalTo(5))
-        .given()
+    public void GetLottoForIdTwoForm() {
+        expect().given()
                 .log().all()
         .when()
-                .get("/lotto");
+                .get("/lotto")
+        .then()
+                .log().all()
+                .body("lotto.lottoId", is(5));
     }
 
     @Test
-    public void GetLottoWinnersId() {
-        expect()
-                .log().all()
-                .body("lotto.winners.winnerId", hasItems(23, 54))
-        .given()
+    public void GetLottoWinnersForId() {
+        expect().given()
                 .log().all()
         .when()
-                .get("/lotto");
+                .get("/lotto")
+        .then()
+                .log().all()
+                .body("lotto.winners.winnerId", hasItems(23, 54));
     }
 }
