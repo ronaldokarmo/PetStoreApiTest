@@ -1,5 +1,7 @@
 package petstore;
 
+import io.restassured.RestAssured;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -12,15 +14,19 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class User {
 
-    private final String uri = "https://petstore.swagger.io/v2";
     private String userId;
+
+    @BeforeClass
+    public static void init() {
+        RestAssured.baseURI = "https://petstore.swagger.io/v2";
+    }
 
     public String getJson(String json) throws IOException {
         return new String(Files.readAllBytes(Paths.get(json)));
     }
 
     @Test(priority = 9)
-    public void aincluirUser() throws IOException {
+    public void incluirUser() throws IOException {
         String bodyJson = getJson("db/user1.json");
 
         userId = given()
@@ -28,7 +34,7 @@ public class User {
                 .contentType("application/json")
                 .body(bodyJson)
         .when()
-                .post(uri.concat("/user"))
+                .post("/user")
         .then()
                 .log().all()
                 .statusCode(200)
@@ -42,7 +48,7 @@ public class User {
     }
 
     @Test(priority = 10)
-    public void bloginUser() {
+    public void loginUser() {
         String username = "rcarmo";
         String pwd = "pwd1234";
 
@@ -50,7 +56,7 @@ public class User {
                 .log().all()
                 .contentType("application/json")
         .when()
-                .get(uri.concat("/user/login?username=").concat(username).concat("&password=").concat(pwd))
+                .get("/user/login?username=".concat(username).concat("&password=").concat(pwd))
         .then()
                 .log().all()
                 .statusCode(200)
@@ -65,7 +71,7 @@ public class User {
                 .log().all()
                 .contentType("application/json")
         .when()
-                .get(uri.concat("/user/").concat(userId))
+                .get("/user/".concat(userId))
         .then()
                 .log().all()
                 .statusCode(404)
@@ -84,7 +90,7 @@ public class User {
 //                .log().all()
 //                .contentType("application/json")
 //        .when()
-//                .delete(uri.concat("/user/").concat(userId))
+//                .delete("/user/".concat(userId))
 //        .then()
 //                .log().all()
 //                .statusCode(200)

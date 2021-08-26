@@ -1,5 +1,7 @@
 package petstore;
 
+import io.restassured.RestAssured;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -11,8 +13,12 @@ import static org.hamcrest.Matchers.is;
 
 public class Store {
 
-    private final String uri = "https://petstore.swagger.io/v2";
     private int storeId;
+
+    @BeforeClass
+    public static void init() {
+        RestAssured.baseURI = "https://petstore.swagger.io/v2";
+    }
 
     public String getJson(String json) throws IOException {
         return new String(Files.readAllBytes(Paths.get(json)));
@@ -27,7 +33,7 @@ public class Store {
                 .contentType("application/json")
                 .body(bodyJson)
         .when()
-                .post(uri.concat("/store/order"))
+                .post("/store/order")
         .then()
                 .log().all()
                 .statusCode(200)
@@ -47,7 +53,7 @@ public class Store {
                 .log().all()
                 .contentType("application/json")
         .when()
-                .get(uri.concat("/store/order/").concat(String.valueOf(storeId)))
+                .get("/store/order/".concat(String.valueOf(storeId)))
         .then()
                 .log().all()
                 .statusCode(200)
@@ -63,7 +69,7 @@ public class Store {
                 .log().all()
                 .contentType("application/json")
         .when()
-                .delete(uri.concat("/store/order/").concat(String.valueOf(storeId)))
+                .delete("/store/order/".concat(String.valueOf(storeId)))
         .then()
                 .log().all()
                 .statusCode(200)

@@ -1,5 +1,7 @@
 package petstore;
 
+import io.restassured.RestAssured;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -13,8 +15,13 @@ import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.equalTo;
 
 public class PetTests {
-    private final String uri = "https://petstore.swagger.io/v2";
+
     private int petId;
+
+    @BeforeClass
+    public static void init() {
+        RestAssured.baseURI = "https://petstore.swagger.io/v2";
+    }
 
     public String getJson(String json) throws IOException {
         return new String(Files.readAllBytes(Paths.get(json)));
@@ -29,7 +36,7 @@ public class PetTests {
                 .contentType("application/json")
                 .body(bodyJson)
         .when()
-                .post(uri.concat("/pet"))
+                .post("/pet")
         .then()
                 .log().all()
                 .statusCode(200)
@@ -49,7 +56,7 @@ public class PetTests {
                 .log().all()
                 .contentType("application/json")
         .when()
-                .get(uri.concat("/pet/").concat(String.valueOf(petId)))
+                .get("/pet/".concat(String.valueOf(petId)))
         .then()
                 .log().all()
                 .statusCode(200)
@@ -67,7 +74,7 @@ public class PetTests {
                 .contentType("application/json")
                 .body(bodyJson)
         .when()
-                .put(uri.concat("/pet"))
+                .put("/pet")
         .then()
                 .log().all()
                 .statusCode(200)
@@ -81,7 +88,7 @@ public class PetTests {
                 .log().all()
                 .contentType("application/json")
         .when()
-                .delete(uri.concat("/pet/").concat(String.valueOf(petId)))
+                .delete("/pet/".concat(String.valueOf(petId)))
         .then()
                 .log().all()
                 .statusCode(200)
@@ -98,7 +105,7 @@ public class PetTests {
                 .log().all()
                 .contentType("application/json")
         .when()
-                .get(uri.concat("/pet/findByStatus?status=").concat(status))
+                .get("/pet/findByStatus?status=".concat(status))
         .then()
                 .log().all()
                 .statusCode(200)
