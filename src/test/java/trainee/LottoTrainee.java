@@ -1,11 +1,14 @@
 package trainee;
 
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.expect;
-import static io.restassured.RestAssured.given;
+import java.io.InputStream;
+import java.util.List;
+
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class LottoTrainee {
@@ -48,5 +51,23 @@ public class LottoTrainee {
         .then()
                 .log().all()
                 .body("lotto.winners.winnerId", hasItems(23, 54));
+    }
+
+    @Test
+    public void GetResponseBody() {
+        InputStream stream = get("/lotto").asInputStream();
+        byte[] byteArray = get("/lotto").asByteArray();
+        String json = get("/lotto").asString();
+
+        JsonPath jsonPath = new JsonPath(json).setRoot("lotto");
+        int lottoId = jsonPath.getInt("lottoId");
+        List<Integer> winnerIds = jsonPath.get("winners.winnderId");
+
+
+        System.out.println("stream: ".concat(String.valueOf(stream)));
+        System.out.println("byte: ".concat(String.valueOf(byteArray)));
+        //System.out.println("String: ".concat(json));
+        System.out.println(lottoId);
+        System.out.println(winnerIds);
     }
 }

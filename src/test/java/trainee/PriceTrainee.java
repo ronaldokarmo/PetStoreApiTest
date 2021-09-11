@@ -10,6 +10,7 @@ import static io.restassured.RestAssured.expect;
 import static io.restassured.config.JsonConfig.jsonConfig;
 import static io.restassured.config.RestAssuredConfig.newConfig;
 import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class PriceTrainee {
@@ -42,5 +43,17 @@ public class PriceTrainee {
         .then()
                 .log().all()
                 .body("price", is(new BigDecimal("12.12")));
+    }
+
+    @Test
+    public void GetLottoForPriceTreeForm() {
+        expect()
+                .given()
+                .log().all()
+        .when()
+                .get("/price")
+        .then()
+                .log().all()
+                .body("price", equalTo(12.12));
     }
 }
