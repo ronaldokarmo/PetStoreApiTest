@@ -1,12 +1,11 @@
 package petstore;
 
 import io.restassured.RestAssured;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utils.Data;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -15,19 +14,17 @@ import static org.hamcrest.CoreMatchers.is;
 public class User {
 
     private String userId;
+    private Data json;
 
-    @BeforeClass
-    public static void init() {
+    @BeforeMethod
+    public void SetUp() {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
-    }
-
-    public String getJson(String json) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(json)));
+        json = new Data();
     }
 
     @Test(priority = 9)
     public void incluirUser() throws IOException {
-        String bodyJson = getJson("db/user1.json");
+        String bodyJson = json.getJson("db/user1.json");
 
         userId = given()
                 .log().all()

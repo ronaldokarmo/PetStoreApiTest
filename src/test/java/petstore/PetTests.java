@@ -1,35 +1,30 @@
 package petstore;
 
 import io.restassured.RestAssured;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utils.Data;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 public class PetTests {
 
     private int petId;
+    private Data json;
 
-    @BeforeClass
-    public static void init() {
+    @BeforeMethod
+    public void SetUp() {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
-    }
-
-    public String getJson(String json) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(json)));
+        json = new Data();
     }
 
     @Test(priority = 1)
     public void incluirPet() throws IOException {
-        String bodyJson = getJson("db/pet1.json");
+        String bodyJson = json.getJson("db/pet1.json");
 
         petId = given()
                 .log().all()
@@ -67,7 +62,7 @@ public class PetTests {
 
     @Test(priority = 3)
     public void alterarPet() throws IOException {
-        String bodyJson = getJson("db/pet2.json");
+        String bodyJson = json.getJson("db/pet2.json");
 
         given()
                 .log().all()
