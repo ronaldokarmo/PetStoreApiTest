@@ -10,7 +10,7 @@ import java.io.IOException;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
-public class Store {
+public class StoreTest {
 
     private int storeId;
     private Data json;
@@ -22,7 +22,7 @@ public class Store {
     }
 
     @Test(priority = 6)
-    public void incluirStore() throws IOException {
+    public void petStorePost() throws IOException {
         String bodyJson = json.getJson("db/store1.json");
 
         storeId = given()

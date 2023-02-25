@@ -23,87 +23,104 @@ public class PetTests {
     }
 
     @Test(priority = 1)
-    public void incluirPet() throws IOException {
+    public void petStore1PostPet() throws IOException {
         String bodyJson = json.getJson("db/pet1.json");
 
         petId = given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)
-        .when()
+                .when()
                 .post("/pet")
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("category.name", is("Dogs"))
                 .body("name", is("Nainai"))
                 .body("tags.name", contains("breed"))
                 .body("status", is("available"))
-        .extract()
+                .extract()
                 .jsonPath().getInt("id");
 
         System.out.println("petId: ".concat(String.valueOf(petId)));
     }
 
     @Test(priority = 2)
-    public void consultarPet() {
-        given()
-                .log().all()
-                .contentType("application/json")
-        .when()
-                .get("/pet/".concat(String.valueOf(petId)))
-        .then()
-                .log().all()
-                .statusCode(200)
-                .body("id", is(petId))
-                .body("name", is("Nainai"))
-                .body("status", is("available"));
-    }
-
-    @Test(priority = 3)
-    public void alterarPet() throws IOException {
+    public void petStore2PutPet() throws IOException {
         String bodyJson = json.getJson("db/pet2.json");
 
         given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)
-        .when()
+                .when()
                 .put("/pet")
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("name", is("Jazz"))
                 .body("status", is("sold"));
     }
 
-    @Test(priority = 4)
-    public void  excluirPet() {
+    @Test
+    public void petStore3DeletePet() {
         given()
                 .log().all()
                 .contentType("application/json")
-        .when()
+                .when()
                 .delete("/pet/".concat(String.valueOf(petId)))
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
-                .body("type", is ("unknown"))
+                .body("type", is("unknown"))
                 .body("message", is(String.valueOf(petId)));
     }
 
-    @Test(priority = 5)
-    public void consultarPetPorStatus(){
+    @Test
+    public void petStore4GetPetById() {
+        given()
+                .log().all()
+                .when()
+                .pathParams("petId", petId)
+                .get("/pet/{petId}")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("id", is(petId))
+                .body("name", is("string"))
+                .body("status", is("available"));
+    }
+
+    @Test
+    public void petStore5GetPetByStatus() {
         String status = "available";
 
         given()
                 .log().all()
                 .contentType("application/json")
-        .when()
+                .when()
                 .get("/pet/findByStatus?status=".concat(status))
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("name[]", everyItem(equalTo("Jazz")));
+    }
+
+    @Test
+    public void petStore6GetPetByIdNotFound() {
+        given()
+                .log().all()
+                .contentType("application/json")
+                .when()
+                .pathParam("petId", 19840)
+                .when()
+                .get("/pet/{petId}")
+                .then()
+                .log().all()
+                .statusCode(404)
+                .body("code", is(1))
+                .body("type", is("error"))
+                .body("message", is("Pet not found"));
     }
 }
