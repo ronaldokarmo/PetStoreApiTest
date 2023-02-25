@@ -21,37 +21,37 @@ public class StoreTest {
         json = new Data();
     }
 
-    @Test(priority = 6)
-    public void petStorePost() throws IOException {
+    @Test
+    public void petStore1PostStore() throws IOException {
         String bodyJson = json.getJson("db/store1.json");
 
         storeId = given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)
-        .when()
+                .when()
                 .post("/store/order")
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("id", is(10203040))
                 .body("petId", is(1984020712))
                 .body("quantity", is(5))
                 .body("status", is("placed"))
-        .extract()
+                .extract()
                 .jsonPath().getInt("id");
 
         System.out.println("storeId: ".concat(String.valueOf(storeId)));
     }
 
-    @Test(priority = 7)
-    public void consultarStore() {
+    @Test
+    public void petStore2GetSoterByOrder() {
         given()
                 .log().all()
                 .contentType("application/json")
-        .when()
+                .when()
                 .get("/store/order/".concat(String.valueOf(storeId)))
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("id", is(storeId))
@@ -60,18 +60,18 @@ public class StoreTest {
                 .body("status", is("placed"));
     }
 
-    @Test(priority = 8)
-    public void  excluirStore() {
+    @Test
+    public void petStore3DeleteStore() {
         given()
                 .log().all()
                 .contentType("application/json")
-        .when()
+                .when()
                 .delete("/store/order/".concat(String.valueOf(storeId)))
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
-                .body("type", is ("unknown"))
+                .body("type", is("unknown"))
                 .body("message", is(String.valueOf(storeId)));
     }
 }

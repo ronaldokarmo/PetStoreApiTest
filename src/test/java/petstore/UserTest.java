@@ -22,77 +22,94 @@ public class UserTest {
         json = new Data();
     }
 
-    @Test(priority = 9)
-    public void incluirUser() throws IOException {
+    @Test
+    public void petStore1PostUser() throws IOException {
         String bodyJson = json.getJson("db/user1.json");
 
         userId = given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)
-        .when()
+                .when()
                 .post("/user")
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
-                .body("type", is ("unknown"))
+                .body("type", is("unknown"))
                 .body("message", is("102030"))
-        .extract()
+                .extract()
                 .path("message");
 
         System.out.println("usertId: ".concat(userId));
     }
 
-    @Test(priority = 10)
-    public void loginUser() {
+    @Test
+    public void petStore2GetUserByUserName() {
         String username = "rcarmo";
         String pwd = "pwd1234";
 
         given()
                 .log().all()
                 .contentType("application/json")
-        .when()
+                .when()
                 .get("/user/login?username=".concat(username).concat("&password=").concat(pwd))
-        .then()
+                .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
-                .body("type", is ("unknown"))
+                .body("type", is("unknown"))
                 .body("message", containsString("logged in user session:"));
     }
 
-    @Test(priority = 11)
-    public void consultarUser() {
+    @Test
+    public void petStore3GetUserById() {
         given()
                 .log().all()
                 .contentType("application/json")
-        .when()
+                .when()
                 .get("/user/".concat(userId))
-        .then()
+                .then()
                 .log().all()
                 .statusCode(404)
                 .body("code", is(1))
-                .body("type", is ("error"))
+                .body("type", is("error"))
                 .body("message", is("User not found"));
-                //.body("id", is(userId))
-                //.body("username", is("rcarmo"))
-                //.body("firstName", is("Ronaldo"))
-               // .body("email", is("ronaldokarmo@gmail.com"));
+//                .body("id", is(userId))
+//                .body("username", is("rcarmo"))
+//                .body("firstName", is("Ronaldo"))
+//                .body("email", is("ronaldokarmo@gmail.com"));
     }
 
-//    @Test(priority =12)
-//    public void  excluirUser() {
-//        given()
-//                .log().all()
-//                .contentType("application/json")
-//        .when()
-//                .delete("/user/".concat(userId))
-//        .then()
-//                .log().all()
-//                .statusCode(200)
+    @Test
+    public void petStore4DeleteUser() {
+        given()
+                .log().all()
+                .contentType("application/json")
+                .when()
+                .delete("/user/".concat(userId))
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("code", is(200))
+                .body("type", is("unknown"))
+                .body("message", is(userId));
+    }
+
+    @Test
+    public void petStore4DeleteUserNotFound() {
+        given()
+                .log().all()
+                .contentType("application/json")
+                .when()
+                .delete("/user/".concat(userId))
+                .then()
+                .log().all()
+                .statusCode(404);
 //                .body("code", is(200))
-//                .body("type", is ("unknown"))
+//                .body("type", is("unknown"))
+//                .body("message", is(userId));                .body("code", is(200))
+//                .body("type", is("unknown"))
 //                .body("message", is(userId));
-//    }
+    }
 }
