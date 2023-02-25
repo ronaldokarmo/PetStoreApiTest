@@ -1,10 +1,12 @@
 package petstore;
 
 import io.restassured.RestAssured;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.Data;
 
+import java.io.File;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
@@ -89,7 +91,10 @@ public class PetTests {
                 .statusCode(200)
                 .body("id", is(petId))
                 .body("name", is("string"))
-                .body("status", is("available"));
+                .body("status", is("available"))
+                .body(JsonSchemaValidator.
+                        matchesJsonSchema(new File("/schema/petStoregetPet.json")));
+        ;
     }
 
     @Test
@@ -121,6 +126,8 @@ public class PetTests {
                 .statusCode(404)
                 .body("code", is(1))
                 .body("type", is("error"))
-                .body("message", is("Pet not found"));
+                .body("message", is("Pet not found"))
+                .body(JsonSchemaValidator.
+                        matchesJsonSchema(new File("/schema/petStoregetPet.json")));
     }
 }

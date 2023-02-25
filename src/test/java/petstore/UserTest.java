@@ -106,10 +106,5 @@ public class UserTest {
                 .then()
                 .log().all()
                 .statusCode(404);
-//                .body("code", is(200))
-//                .body("type", is("unknown"))
-//                .body("message", is(userId));                .body("code", is(200))
-//                .body("type", is("unknown"))
-//                .body("message", is(userId));
     }
 }
