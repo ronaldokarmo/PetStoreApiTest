@@ -3,4 +3,5 @@
 .idea
 gradle
 build
-build.gradle
+*.bat
+gradlew
