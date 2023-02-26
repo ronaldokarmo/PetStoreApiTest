@@ -1,8 +1,8 @@
 package petstore;
 
 import io.restassured.RestAssured;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 import utils.Data;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class UserTest {
     private String userId;
     private Data json;
 
-    @BeforeMethod
+    @Before
     public void SetUp() {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
         json = new Data();
@@ -24,7 +24,7 @@ public class UserTest {
 
     @Test
     public void petStore1PostUser() throws IOException {
-        String bodyJson = json.getJson("db/user1.json");
+        String bodyJson = json.getJson("dataJson/user1.json");
 
         userId = given()
                 .log().all()
@@ -106,10 +106,5 @@ public class UserTest {
                 .then()
                 .log().all()
                 .statusCode(404);
-//                .body("code", is(200))
-//                .body("type", is("unknown"))
-//                .body("message", is(userId));                .body("code", is(200))
-//                .body("type", is("unknown"))
-//                .body("message", is(userId));
     }
 }

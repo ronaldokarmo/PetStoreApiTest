@@ -1,9 +1,10 @@
 package datadriven;
 
+import com.opencsv.exceptions.CsvException;
+import com.tngtech.java.junit.dataprovider.DataProvider;
 import io.restassured.RestAssured;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import utils.Data;
 
 import java.io.IOException;
@@ -20,20 +21,20 @@ public class UserDD {
     private Data csv;
 
     @DataProvider
-    public Iterator<Object[]> provider() throws IOException {
+    public Iterator<Object[]> provider() throws IOException, CsvException {
         List<String[]> testCases = new ArrayList<>();
         String[] testCase = null;
-        testCases = csv.getCsv("db/users.csv");
+        testCases = csv.getCsv("dataJson/users.csv");
         return null;
     }
 
-    @BeforeMethod
+    @BeforeClass
     public void SetUp() {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
         csv = new Data();
     }
 
-    @Test(priority = 9)
+    @Test
     public void incluirUser() throws IOException {
 
         userId = given()

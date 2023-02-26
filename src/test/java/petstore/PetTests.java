@@ -1,32 +1,31 @@
 package petstore;
 
 import io.restassured.RestAssured;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 import utils.Data;
 
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
 
 public class PetTests {
-
-    private int petId;
     private Data json;
 
-    @BeforeMethod
+    @Before
     public void SetUp() {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
         json = new Data();
     }
 
-    @Test(priority = 1)
-    public void petStore1PostPet() throws IOException {
-        String bodyJson = json.getJson("db/pet1.json");
+    @Test
+    public void petStorePostPet() throws IOException {
+        String bodyJson = json.getJson("dataJson/pet1.json");
 
-        petId = given()
+        int petId = given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)
@@ -45,9 +44,9 @@ public class PetTests {
         System.out.println("petId: ".concat(String.valueOf(petId)));
     }
 
-    @Test(priority = 2)
-    public void petStore2PutPet() throws IOException {
-        String bodyJson = json.getJson("db/pet2.json");
+    @Test
+    public void petStorePutPet() throws IOException {
+        String bodyJson = json.getJson("dataJson/pet2.json");
 
         given()
                 .log().all()
@@ -63,37 +62,38 @@ public class PetTests {
     }
 
     @Test
-    public void petStore3DeletePet() {
+    public void petStoreDeletePet() {
         given()
                 .log().all()
                 .contentType("application/json")
                 .when()
-                .delete("/pet/".concat(String.valueOf(petId)))
+                .delete("/pet/".concat(String.valueOf(1984020712)))
                 .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
                 .body("type", is("unknown"))
-                .body("message", is(String.valueOf(petId)));
+                .body("message", is(String.valueOf(1984020712)));
     }
 
     @Test
-    public void petStore4GetPetById() {
+    public void petStoreGetPetById() {
         given()
                 .log().all()
                 .when()
-                .pathParams("petId", petId)
+                .pathParams("petId", 1984020712)
                 .get("/pet/{petId}")
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("id", is(petId))
-                .body("name", is("string"))
-                .body("status", is("available"));
+                .body("id", is(1984020712))
+                .body("name", is("Jazz"))
+                .body("status", is("sold"))
+                .body(matchesJsonSchemaInClasspath("./schema/petStoreGetPetById.json"));
     }
 
     @Test
-    public void petStore5GetPetByStatus() {
+    public void petStoreGetPetByStatus() {
         String status = "available";
 
         given()
@@ -104,16 +104,17 @@ public class PetTests {
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("name[]", everyItem(equalTo("Jazz")));
+                .body("name[]", everyItem(equalTo("Jazz")))
+                .body(matchesJsonSchemaInClasspath("./schema/petStoreGetPetByStatus.json"));
     }
 
     @Test
-    public void petStore6GetPetByIdNotFound() {
+    public void petStoreGetPetByIdNotFound() {
         given()
                 .log().all()
                 .contentType("application/json")
                 .when()
-                .pathParam("petId", 19840)
+                .pathParam("petId", 0)
                 .when()
                 .get("/pet/{petId}")
                 .then()
@@ -121,6 +122,7 @@ public class PetTests {
                 .statusCode(404)
                 .body("code", is(1))
                 .body("type", is("error"))
-                .body("message", is("Pet not found"));
+                .body("message", is("Pet not found"))
+                .body(matchesJsonSchemaInClasspath("./schema/petStoreGetNotFound.json"));
     }
 }

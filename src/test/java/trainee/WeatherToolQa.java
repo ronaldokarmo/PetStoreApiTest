@@ -8,8 +8,10 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class WeatherToolQa {
 
@@ -42,7 +44,7 @@ public class WeatherToolQa {
         Response response = httpRequest.get("/Hyderabad");
 
         int statusCode = response.getStatusCode();
-        Assert.assertEquals(statusCode /*actual value*/, 200 /*expected value*/, "Correct status code returned");
+        assertEquals(statusCode, 200);
     }
 
     @Test
@@ -53,7 +55,7 @@ public class WeatherToolQa {
         Response response = httpRequest.get("/");
 
         int statusCode = response.getStatusCode();
-        Assert.assertEquals(statusCode /*actual value*/, 200 /*expected value*/, "Correct status code returned");
+        assertEquals(statusCode, 200);
     }
 
     @Test
@@ -64,7 +66,7 @@ public class WeatherToolQa {
         Response response = httpRequest.get("/Hyderabad");
 
         String statusLine = response.getStatusLine();
-        Assert.assertEquals(statusLine /*actual value*/, "HTTP/1.1 200 OK" /*expected value*/, "Correct status code returned");
+        assertEquals(statusLine /*actual value*/, "HTTP/1.1 200 OK" /*expected value*/, "Correct status code returned");
     }
 
     @Test
@@ -107,13 +109,13 @@ public class WeatherToolQa {
         Response response = httpRequest.get("/Hyderabad");
 
         String contentType = response.header("Content-Type");
-        Assert.assertNotNull(contentType /* actual value */, "application/json" /* expected value */);
+        assertNotNull(contentType /* actual value */, "application/json" /* expected value */);
 
         String serverType =  response.header("Server");
-        Assert.assertEquals(serverType /* actual value */, "nginx/1.17.10 (Ubuntu)" /* expected value */);
+        assertEquals(serverType /* actual value */, "nginx/1.17.10 (Ubuntu)" /* expected value */);
 
         String contentEncoding = response.header("Content-Encoding");
-        Assert.assertEquals(contentEncoding /* actual value */, "gzip" /* expected value */);
+        assertEquals(contentEncoding /* actual value */, "gzip" /* expected value */);
     }
 
     @Test
@@ -138,7 +140,7 @@ public class WeatherToolQa {
         ResponseBody body = response.getBody();
 
         String bodyAsString = body.asString();
-        Assert.assertEquals(bodyAsString.contains("Hyderabad") /*Expected value*/, true /*Actual Value*/, "Response body contains Hyderabad");
+        assertEquals(bodyAsString.contains("Hyderabad") /*Expected value*/, true /*Actual Value*/);
     }
 
     @Test
@@ -151,7 +153,7 @@ public class WeatherToolQa {
         ResponseBody body = response.getBody();
 
         String bodyAsString = body.asString();
-        Assert.assertEquals(bodyAsString.toLowerCase().contains("hyderabad") /*Expected value*/, true /*Actual Value*/, "Response body contains Hyderabad");
+        assertEquals(bodyAsString.toLowerCase().contains("hyderabad") /*Expected value*/, true /*Actual Value*/);
     }
 
     @Test
@@ -166,7 +168,7 @@ public class WeatherToolQa {
         String city = jsonPathEvaluator.get("City");
 
         System.out.println("City received from Response " + city);
-        Assert.assertEquals(city, "Hyderabad", "Correct city name received in the Response");
+        assertEquals(city, "Hyderabad", "Correct city name received in the Response");
 
     }
 

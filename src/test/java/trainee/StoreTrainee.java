@@ -1,8 +1,9 @@
 package trainee;
 
 import io.restassured.RestAssured;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -12,13 +13,13 @@ import static org.hamcrest.Matchers.hasItems;
 
 public class StoreTrainee {
 
-    @BeforeClass
+    @Before
     public static void init() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port=3001;
     }
 
-    @Test(priority = 1)
+    @Test
     public void consultarLivrosPorPreco()  {
 
         given()
@@ -32,7 +33,7 @@ public class StoreTrainee {
             .body("store.book.findAll { it.price < 12.99 }.title", hasItems("Sayings of the Century", "Moby Dick", "Sword of Honour"));
     }
 
-    @Test(priority = 2)
+    @Test
     public void retornarTituloDosLivrosComValorInferioraDezReais()  {
 
         String response = given()

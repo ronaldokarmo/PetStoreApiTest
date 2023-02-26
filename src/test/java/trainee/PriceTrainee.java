@@ -1,8 +1,9 @@
 package trainee;
 
 import io.restassured.RestAssured;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 
@@ -15,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 
 public class PriceTrainee {
 
-    @BeforeClass
+    @Before
     public static void init() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 3001;
