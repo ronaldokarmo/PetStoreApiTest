@@ -1,7 +1,0 @@
-# Project exclude paths
-.gradle
-.idea
-gradle
-build
-*.bat
-gradlew
