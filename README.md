@@ -31,5 +31,5 @@ git clone https://github.com/ronaldokarmo/PetStoreApiTest.git
 </table>
 
 ## 📝 Licença
-Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+Esse projeto está sob licença.
 [⬆ Voltar ao topo](#PetStoreApiTest)<br>

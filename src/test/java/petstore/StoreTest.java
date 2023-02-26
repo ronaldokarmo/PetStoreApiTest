@@ -13,8 +13,6 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.is;
 
 public class StoreTest {
-
-    private int storeId;
     private Data json;
 
     @Before
@@ -27,7 +25,7 @@ public class StoreTest {
     public void petStorePostStore() throws IOException {
         String bodyJson = json.getJson("dataJson/store1.json");
 
-        storeId = given()
+        int storeId = given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)

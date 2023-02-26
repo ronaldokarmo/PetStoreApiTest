@@ -15,7 +15,6 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class UserTest {
 
-    private String userId;
     private Data json;
 
     @Before
@@ -28,7 +27,7 @@ public class UserTest {
     public void petStorePostUser() throws IOException {
         String bodyJson = json.getJson("dataJson/user1.json");
 
-        userId = given()
+        String userId = given()
                 .log().all()
                 .contentType("application/json")
                 .body(bodyJson)
