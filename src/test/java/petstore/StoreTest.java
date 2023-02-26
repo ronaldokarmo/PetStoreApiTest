@@ -1,6 +1,7 @@
 package petstore;
 
 import io.restassured.RestAssured;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import utils.Data;
@@ -8,6 +9,7 @@ import utils.Data;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.is;
 
 public class StoreTest {
@@ -22,7 +24,7 @@ public class StoreTest {
     }
 
     @Test
-    public void petStore1PostStore() throws IOException {
+    public void petStorePostStore() throws IOException {
         String bodyJson = json.getJson("dataJson/store1.json");
 
         storeId = given()
@@ -45,33 +47,50 @@ public class StoreTest {
     }
 
     @Test
-    public void petStore2GetSoterByOrder() {
+    public void petStoreGetSoterByOrder() {
         given()
                 .log().all()
                 .contentType("application/json")
                 .when()
-                .get("/store/order/".concat(String.valueOf(storeId)))
+                .get("/store/order/".concat(String.valueOf(10203040)))
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("id", is(storeId))
+                .body("id", is(10203040))
                 .body("petId", is(1984020712))
                 .body("quantity", is(5))
-                .body("status", is("placed"));
+                .body("status", is("placed"))
+                .body(matchesJsonSchemaInClasspath("./schema/petStoreGetStoreByOder.json"));
     }
 
     @Test
-    public void petStore3DeleteStore() {
+    public void petStoreGetSoterByOrderNotFound() {
         given()
                 .log().all()
                 .contentType("application/json")
                 .when()
-                .delete("/store/order/".concat(String.valueOf(storeId)))
+                .get("/store/order/".concat(String.valueOf(102030)))
+                .then()
+                .log().all()
+                .statusCode(404)
+                .body("code", CoreMatchers.is(1))
+                .body("type", CoreMatchers.is("error"))
+                .body("message", CoreMatchers.is("Order not found"))
+                .body(matchesJsonSchemaInClasspath("schema/petStoreNotFound.json"));
+    }
+
+    @Test
+    public void petStoreDeleteStore() {
+        given()
+                .log().all()
+                .contentType("application/json")
+                .when()
+                .delete("/store/order/".concat(String.valueOf(10203040)))
                 .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
                 .body("type", is("unknown"))
-                .body("message", is(String.valueOf(storeId)));
+                .body("message", is(String.valueOf(10203040)));
     }
 }

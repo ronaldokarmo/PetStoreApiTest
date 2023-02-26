@@ -1,6 +1,7 @@
 package petstore;
 
 import io.restassured.RestAssured;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import utils.Data;
@@ -8,6 +9,7 @@ import utils.Data;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -23,7 +25,7 @@ public class UserTest {
     }
 
     @Test
-    public void petStore1PostUser() throws IOException {
+    public void petStorePostUser() throws IOException {
         String bodyJson = json.getJson("dataJson/user1.json");
 
         userId = given()
@@ -45,7 +47,40 @@ public class UserTest {
     }
 
     @Test
-    public void petStore2GetUserByUserName() {
+    public void petStoreGetUserByUserName() {
+        given()
+                .log().all()
+                .contentType("application/json")
+                .when()
+                .pathParams("username", "rcarmo")
+                .get("/user/{username}")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("id", is(102030))
+                .body("username", is("rcarmo"))
+                .body(matchesJsonSchemaInClasspath("schema/petStoreGetUserByName.json"));
+    }
+
+    @Test
+    public void petStoreGetUserByUserNameNotFound() {
+        given()
+                .log().all()
+                .contentType("application/json")
+                .when()
+                .pathParams("username", "xxxxx")
+                .get("/user/{username}")
+                .then()
+                .log().all()
+                .statusCode(404)
+                .body("code", CoreMatchers.is(1))
+                .body("type", CoreMatchers.is("error"))
+                .body("message", CoreMatchers.is("User not found"))
+                .body(matchesJsonSchemaInClasspath("schema/petStoreNotFound.json"));
+    }
+
+    @Test
+    public void petStoreGetUserLogin() {
         String username = "rcarmo";
         String pwd = "pwd1234";
 
@@ -59,52 +94,40 @@ public class UserTest {
                 .statusCode(200)
                 .body("code", is(200))
                 .body("type", is("unknown"))
-                .body("message", containsString("logged in user session:"));
+                .body("message", containsString("logged in user session:"))
+                .body(matchesJsonSchemaInClasspath("schema/petStoreNotFound.json"));
     }
 
     @Test
-    public void petStore3GetUserById() {
+    public void petStoreGetUserLogout() {
         given()
                 .log().all()
                 .contentType("application/json")
                 .when()
-                .get("/user/".concat(userId))
-                .then()
-                .log().all()
-                .statusCode(404)
-                .body("code", is(1))
-                .body("type", is("error"))
-                .body("message", is("User not found"));
-//                .body("id", is(userId))
-//                .body("username", is("rcarmo"))
-//                .body("firstName", is("Ronaldo"))
-//                .body("email", is("ronaldokarmo@gmail.com"));
-    }
-
-    @Test
-    public void petStore4DeleteUser() {
-        given()
-                .log().all()
-                .contentType("application/json")
-                .when()
-                .delete("/user/".concat(userId))
+                .get("/user/logout")
                 .then()
                 .log().all()
                 .statusCode(200)
                 .body("code", is(200))
                 .body("type", is("unknown"))
-                .body("message", is(userId));
+                .body("message", is("ok"))
+                .body(matchesJsonSchemaInClasspath("schema/petStoreNotFound.json"));
     }
 
     @Test
-    public void petStore4DeleteUserNotFound() {
+    public void petStoreDeleteUser() {
         given()
                 .log().all()
                 .contentType("application/json")
                 .when()
-                .delete("/user/".concat(userId))
+                .pathParams("username", "rcarmo")
+                .delete("/user/{username}")
                 .then()
                 .log().all()
-                .statusCode(404);
+                .statusCode(200)
+                .body("code", is(200))
+                .body("type", is("unknown"))
+                .body("message", is("rcarmo"))
+                .body(matchesJsonSchemaInClasspath("schema/petStoreNotFound.json"));
     }
 }

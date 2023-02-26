@@ -123,6 +123,6 @@ public class PetTests {
                 .body("code", is(1))
                 .body("type", is("error"))
                 .body("message", is("Pet not found"))
-                .body(matchesJsonSchemaInClasspath("./schema/petStoreGetPetNotFound.json"));
+                .body(matchesJsonSchemaInClasspath("schema/petStoreNotFound.json"));
     }
 }
