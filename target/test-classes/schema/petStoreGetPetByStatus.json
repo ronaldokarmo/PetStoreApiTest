@@ -18,8 +18,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "id",
-          "name"
+          "id"
         ]
       },
       "name": {
@@ -46,8 +45,7 @@
           },
           "additionalProperties": false,
           "required": [
-            "id",
-            "name"
+            "id"
           ]
         },
         "additionalItems": false
