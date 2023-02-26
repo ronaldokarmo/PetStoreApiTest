@@ -2,7 +2,6 @@ package trainee;
 
 import io.restassured.RestAssured;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,10 +10,10 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.path.xml.XmlPath.from;
 import static org.hamcrest.Matchers.hasItems;
 
-public class StoreTrainee {
+public class StoreTraineeTest {
 
     @Before
-    public static void init() {
+    public void SetUp() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port=3001;
     }

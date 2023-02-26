@@ -5,9 +5,9 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class OpenWeathermap {
+public class OpenWeathermapTest {
 
     @Test
     public void queryParameter() {
@@ -21,7 +21,7 @@ public class OpenWeathermap {
 
         String jsonString = response.asString();
         System.out.println(response.getStatusCode());
-        assertEquals(jsonString.contains("London"), true);
+        assertTrue(jsonString.contains("London"));
     }
 
 //    @Test

@@ -5,19 +5,17 @@ import io.restassured.path.json.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 
-public class LottoTraineeA {
-
+public class LottoTraineeTest {
     @Before
     public void SetUp() {
         RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 3001;
+        RestAssured.port = 3000;
     }
 
     @Test
@@ -25,9 +23,9 @@ public class LottoTraineeA {
         given()
                 .log().all()
                 .contentType("application/json")
-        .when()
+                .when()
                 .get("/lotto")
-        .then()
+                .then()
                 .log().all()
                 .body("lotto.lottoId", equalTo(5));
     }
@@ -36,9 +34,9 @@ public class LottoTraineeA {
     public void GetLottoForIdTwoForm() {
         expect().given()
                 .log().all()
-        .when()
+                .when()
                 .get("/lotto")
-        .then()
+                .then()
                 .log().all()
                 .body("lotto.lottoId", is(5));
     }
@@ -47,28 +45,22 @@ public class LottoTraineeA {
     public void GetLottoWinnersForId() {
         expect().given()
                 .log().all()
-        .when()
+                .when()
                 .get("/lotto")
-        .then()
+                .then()
                 .log().all()
                 .body("lotto.winners.winnerId", hasItems(23, 54));
     }
 
     @Test
     public void GetResponseBody() {
-        InputStream stream = get("/lotto").asInputStream();
-        byte[] byteArray = get("/lotto").asByteArray();
-        String json = get("/lotto").asString();
-
-        JsonPath jsonPath = new JsonPath(json).setRoot("lotto");
+        JsonPath jsonPath = new JsonPath(get("/lotto").asString()).setRootPath("lotto");
+        System.out.println(jsonPath.prettyPrint());
         int lottoId = jsonPath.getInt("lottoId");
-        List<Integer> winnerIds = jsonPath.get("winners.winnderId");
+        List<Object> wnumbers = jsonPath.getList("winning-numbers");
 
-
-        System.out.println("stream: ".concat(String.valueOf(stream)));
-        System.out.println("byte: ".concat(Arrays.toString(byteArray)));
-        //System.out.println("String: ".concat(json));
-        System.out.println(lottoId);
-        System.out.println(winnerIds);
+        assertEquals(5, lottoId);
+        assertEquals(2, wnumbers.get(0));
+        assertEquals(7, wnumbers.size());
     }
 }

@@ -13,7 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class WeatherToolQa {
+public class WeatherToolQaTest {
 
     @Test
     public void GetWeatherDetails()
@@ -109,13 +109,13 @@ public class WeatherToolQa {
         Response response = httpRequest.get("/Hyderabad");
 
         String contentType = response.header("Content-Type");
-        assertNotNull(contentType /* actual value */, "application/json" /* expected value */);
+        assertNotNull(contentType, "application/json");
 
         String serverType =  response.header("Server");
-        assertEquals(serverType /* actual value */, "nginx/1.17.10 (Ubuntu)" /* expected value */);
+        assertEquals(serverType, "nginx/1.17.10 (Ubuntu)");
 
         String contentEncoding = response.header("Content-Encoding");
-        assertEquals(contentEncoding /* actual value */, "gzip" /* expected value */);
+        assertEquals(contentEncoding, "gzip");
     }
 
     @Test

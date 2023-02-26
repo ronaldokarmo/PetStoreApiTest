@@ -3,7 +3,7 @@ package petstore;
 import io.restassured.RestAssured;
 import org.junit.Before;
 import org.junit.Test;
-import utils.Data;
+import br.com.petstore.utils.Data;
 
 import java.io.IOException;
 
