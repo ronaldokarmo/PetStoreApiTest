@@ -42,7 +42,7 @@ git clone https://github.com/ronaldokarmo/PetStoreApiTest.git
   <tr>
     <td align="center">
       <a href="#">
-        <img src="https://miro.medium.com/max/360/0*1SkS3mSorArvY9kS.jpg" width="100px;" alt="Foto do Steve Jobs"/><br>
+        <img src="https://github.com/ronaldokarmo/PetStoreApiTest/blob/master/img/rcarmoM.jpg" width="100px;" alt="Foto do Steve Jobs"/><br>
         <sub>
           <b>Ronaldo do Carmo</b>
         </sub>
