@@ -18,7 +18,7 @@ public class PriceTraineeTest {
     @Before
     public void SetUp() {
         RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 3001;
+        RestAssured.port = 3000;
     }
 
     @Test
@@ -54,6 +54,6 @@ public class PriceTraineeTest {
                 .get("/price")
         .then()
                 .log().all()
-                .body("price", equalTo(12.12));
+                .body("price", equalTo(12.12F));
     }
 }

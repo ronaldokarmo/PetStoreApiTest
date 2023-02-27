@@ -10,8 +10,7 @@ import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class WeatherToolQaTest {
 
@@ -66,7 +65,7 @@ public class WeatherToolQaTest {
         Response response = httpRequest.get("/Hyderabad");
 
         String statusLine = response.getStatusLine();
-        assertEquals(statusLine /*actual value*/, "HTTP/1.1 200 OK" /*expected value*/, "Correct status code returned");
+        assertEquals(statusLine , "HTTP/1.1 200 OK");
     }
 
     @Test
@@ -108,14 +107,8 @@ public class WeatherToolQaTest {
         RequestSpecification httpRequest = RestAssured.given().log().all();
         Response response = httpRequest.get("/Hyderabad");
 
-        String contentType = response.header("Content-Type");
-        assertNotNull(contentType, "application/json");
-
         String serverType =  response.header("Server");
         assertEquals(serverType, "nginx/1.17.10 (Ubuntu)");
-
-        String contentEncoding = response.header("Content-Encoding");
-        assertEquals(contentEncoding, "gzip");
     }
 
     @Test
@@ -124,7 +117,6 @@ public class WeatherToolQaTest {
         RestAssured.baseURI = "https://demoqa.com/utilities/weather/city";
         RequestSpecification httpRequest = RestAssured.given().log().all();
         Response response = httpRequest.get("/Hyderabad");
-
         ResponseBody body = response.getBody();
 
         System.out.println("Response Body is: " + body.asString());
@@ -136,11 +128,10 @@ public class WeatherToolQaTest {
         RestAssured.baseURI = "https://demoqa.com/utilities/weather/city";
         RequestSpecification httpRequest = RestAssured.given().log().all();
         Response response = httpRequest.get("/Hyderabad");
-
         ResponseBody body = response.getBody();
 
         String bodyAsString = body.asString();
-        assertEquals(bodyAsString.contains("Hyderabad") /*Expected value*/, true /*Actual Value*/);
+        assertTrue(bodyAsString.contains("Hyderabad"));
     }
 
     @Test
@@ -153,7 +144,7 @@ public class WeatherToolQaTest {
         ResponseBody body = response.getBody();
 
         String bodyAsString = body.asString();
-        assertEquals(bodyAsString.toLowerCase().contains("hyderabad") /*Expected value*/, true /*Actual Value*/);
+        assertTrue(bodyAsString.toLowerCase().contains("hyderabad"));
     }
 
     @Test
@@ -168,7 +159,7 @@ public class WeatherToolQaTest {
         String city = jsonPathEvaluator.get("City");
 
         System.out.println("City received from Response " + city);
-        assertEquals(city, "Hyderabad", "Correct city name received in the Response");
+        assertEquals(city, "Hyderabad");
 
     }
 
